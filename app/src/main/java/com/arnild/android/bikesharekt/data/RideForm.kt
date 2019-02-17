@@ -1,7 +1,6 @@
 package com.arnild.android.bikesharekt.data
 
 import android.app.Activity
-import android.widget.Button
 import android.widget.TextView
 import com.arnild.android.bikesharekt.R
 

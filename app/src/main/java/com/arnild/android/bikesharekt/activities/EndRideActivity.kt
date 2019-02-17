@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.arnild.android.bikesharekt.R
-import com.arnild.android.bikesharekt.data.RideDb
 import com.arnild.android.bikesharekt.data.RideForm
 
 class EndRideActivity : AppCompatActivity() {
