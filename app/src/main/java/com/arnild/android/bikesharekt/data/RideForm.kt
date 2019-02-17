@@ -34,6 +34,7 @@ class RideForm {
     fun submit(bike: String, start: String, end: String) {
         if (!isBlank(this.newWhat) && !isBlank(this.newWhere)) {
             this.last = Ride(bike, start, end)
+            RideDb.add(bike,start,end) //add to 'database'
             updateUI()
         }
     }

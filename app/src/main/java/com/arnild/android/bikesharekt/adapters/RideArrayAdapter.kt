@@ -12,24 +12,42 @@ import com.arnild.android.bikesharekt.data.Ride
 class RideArrayAdapter(context: Context, objects: List<Ride>) : ArrayAdapter<Ride>(context,
     R.layout.adapter_array_ride, objects) {
 
+    private data class ViewHolder @JvmOverloads constructor(
+        val bike: TextView,
+        val start: TextView,
+        val end: TextView
+    )
+
     private val inflater: LayoutInflater
             = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val rowView = inflater.inflate(R.layout.adapter_array_ride, parent, false)
 
-        var bike = getItem(position).bikeName
-        var start = getItem(position).startRide
-        var end = getItem(position).endRide
+        val holder: ViewHolder
+        var cView = convertView
 
-        val bikeView = rowView.findViewById(R.id.what_bike_ride) as TextView
-        val startView = rowView.findViewById(R.id.start_ride) as TextView
-        val endView = rowView.findViewById(R.id.end_ride) as TextView
+        if (convertView == null) {
+            cView = inflater.inflate(R.layout.adapter_array_ride, parent, false)
 
-        bikeView.text = bike
-        startView.text = start
-        endView.text = end
+            holder = ViewHolder(
+                cView.findViewById(R.id.what_bike_ride),
+                cView.findViewById(R.id.start_ride),
+                cView.findViewById(R.id.end_ride)
+            )
+            cView.tag = holder
+        }
+        else {
+            holder = cView!!.tag as ViewHolder
+        }
 
-        return rowView
+        val bike = this.getItem(position)!!.bikeName
+        val start = this.getItem(position)!!.startRide
+        val end = this.getItem(position)!!.endRide
+
+        holder.bike.text = bike
+        holder.start.text = start
+        holder.end.text = end
+
+        return cView!!
     }
 }

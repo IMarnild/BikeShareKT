@@ -22,6 +22,5 @@ class StartRideActivity : AppCompatActivity() {
         val where = rideForm.getWhere()
 
         rideForm.submit(bike, where, "n/a")
-        RideDb.add(bike, where, "n/a")
     }
 }
