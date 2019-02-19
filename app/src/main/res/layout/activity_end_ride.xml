@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/new_ride_layout"
-        layout="@layout/input_new_ride"/>
+        layout="@layout/form_ride"/>
 
     <Button
         android:id="@+id/end_button"
