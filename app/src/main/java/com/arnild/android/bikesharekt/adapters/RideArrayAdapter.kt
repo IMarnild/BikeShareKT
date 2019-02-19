@@ -5,18 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import com.arnild.android.bikesharekt.R
 import com.arnild.android.bikesharekt.data.Ride
+import com.arnild.android.bikesharekt.data.ViewHolder
 
 class RideArrayAdapter(context: Context, objects: List<Ride>) : ArrayAdapter<Ride>(context,
     R.layout.adapter_array_ride, objects) {
-
-    private data class ViewHolder @JvmOverloads constructor(
-        val bike: TextView,
-        val start: TextView,
-        val end: TextView
-    )
 
     private val inflater: LayoutInflater
             = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
