@@ -26,14 +26,10 @@ class RideForm {
         this.newWhere.requestFocus()
     }
 
-    private fun isBlank(textView: TextView): Boolean {
-        return textView.text.toString().isBlank()
-    }
-
     fun submit(bike: String, start: String, end: String) {
-        if (!isBlank(this.newWhat) && !isBlank(this.newWhere)) {
+        if (confirmUserInput()) {
             this.last = Ride(bike, start, end)
-            RideDb.add(bike,start,end) //add to 'database'
+            RideDb.add(bike,start,end)
             updateUI()
         }
     }
@@ -44,5 +40,13 @@ class RideForm {
 
     fun getWhere(): String {
         return this.newWhere.text.toString().trim()
+    }
+
+    private fun confirmUserInput(): Boolean {
+        return !isBlank(this.newWhat) && !isBlank(this.newWhere)
+    }
+
+    private fun isBlank(textView: TextView): Boolean {
+        return textView.text.toString().isBlank()
     }
 }
