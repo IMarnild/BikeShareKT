@@ -3,12 +3,37 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context=".Fragments.BikeShareFragment">
+             tools:context=".fragments.BikeShareFragment">
+    <Button
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_ride"
+            android:layout_gravity="center"
+            android:onClick="startAddRide"/>
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <Button
+            android:id="@+id/end_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/end_ride"
+            android:layout_gravity="center"
+            android:onClick="startEndRide"/>
+
+    <Button
+            android:id="@+id/list_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/list_rides"
+            android:layout_gravity="center"
+            android:onClick="showRides"/>
+
+    <ListView
+            android:id="@+id/list_view_ride"
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"/>
-
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+    >
+    </ListView>
 </FrameLayout>
