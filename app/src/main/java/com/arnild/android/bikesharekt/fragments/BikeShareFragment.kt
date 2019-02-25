@@ -6,15 +6,20 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ListView
 import com.arnild.android.bikesharekt.R
 import com.arnild.android.bikesharekt.activities.EndRideActivity
 import com.arnild.android.bikesharekt.activities.StartRideActivity
-
+import com.arnild.android.bikesharekt.adapters.RideArrayAdapter
+import com.arnild.android.bikesharekt.data.RideDb
 
 class BikeShareFragment : Fragment() {
 
     private lateinit var listView: ListView
+    private lateinit var addRide: Button
+    private lateinit var endRide: Button
+    private lateinit var listRides: Button
     private val LIST_RIDE_VISIBILITY: String = "rideList"
     private var isRideListVisible: Boolean = false
 
@@ -25,7 +30,10 @@ class BikeShareFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.listView = view.findViewById(R.id.list_view_ride)
+        this.initVariables(view)
+        val rideArrayAdapter = RideArrayAdapter(view.context, RideDb.getAll())
+        this.listView.adapter = rideArrayAdapter
+        this.setButtonListeners()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -36,20 +44,29 @@ class BikeShareFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState!!.putBoolean(LIST_RIDE_VISIBILITY, this.isRideListVisible)
+        outState.putBoolean(LIST_RIDE_VISIBILITY, this.isRideListVisible)
     }
 
-    fun startAddRide(view: View) {
-        val intent = Intent(view.context, StartRideActivity::class.java)
-        this.startActivity(intent)
+    private fun initVariables(view: View) {
+        this.listView = view.findViewById(R.id.list_view_ride)
+        this.addRide = view.findViewById(R.id.add_button)
+        this.endRide = view.findViewById(R.id.end_button)
+        this.listRides = view.findViewById(R.id.list_button)
     }
 
-    fun startEndRide(view: View) {
-        val intent = Intent(view.context, EndRideActivity::class.java)
-        this.startActivity(intent)
+    private fun setButtonListeners() {
+        this.addRide.setOnClickListener {
+            val intent = Intent(activity, StartRideActivity::class.java)
+            this.startActivity(intent) }
+
+        this.endRide.setOnClickListener {
+            val intent = Intent(activity, EndRideActivity::class.java)
+            this.startActivity(intent) }
+
+        this.listRides.setOnClickListener { this.showRides() }
     }
 
-    fun showRides(view: View) {
+    private fun showRides() {
         if (this.listView.visibility == View.GONE) {
             this.listView.visibility = View.VISIBLE
             this.isRideListVisible = true
