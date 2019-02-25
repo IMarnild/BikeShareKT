@@ -31,9 +31,13 @@ class BikeShareFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.initVariables(view)
-        val rideArrayAdapter = RideArrayAdapter(view.context, RideDb.getAll())
-        this.listView.adapter = rideArrayAdapter
         this.setButtonListeners()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val rideArrayAdapter = RideArrayAdapter(view!!.context, RideDb.getAll())
+        this.listView.adapter = rideArrayAdapter
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
