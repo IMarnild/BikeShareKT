@@ -3,11 +3,12 @@ package com.arnild.android.bikesharekt.fragments
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ListView
 import com.arnild.android.bikesharekt.R
 import com.arnild.android.bikesharekt.activities.EndRideActivity
 import com.arnild.android.bikesharekt.activities.StartRideActivity
@@ -16,12 +17,14 @@ import com.arnild.android.bikesharekt.data.RideDb
 
 class BikeShareFragment : Fragment() {
 
-    private lateinit var listView: ListView
+    private lateinit var listView: RecyclerView
+    private lateinit var viewAdapter: RideArrayAdapter
     private lateinit var addRide: Button
     private lateinit var endRide: Button
     private lateinit var listRides: Button
     private val LIST_RIDE_VISIBILITY: String = "rideList"
     private var isRideListVisible: Boolean = false
+    private lateinit var viewManager: RecyclerView.LayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,12 +35,6 @@ class BikeShareFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         this.initVariables(view)
         this.setButtonListeners()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val rideArrayAdapter = RideArrayAdapter(view!!.context, RideDb.getAll())
-        this.listView.adapter = rideArrayAdapter
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -52,10 +49,16 @@ class BikeShareFragment : Fragment() {
     }
 
     private fun initVariables(view: View) {
-        this.listView = view.findViewById(R.id.list_view_ride)
         this.addRide = view.findViewById(R.id.add_button)
         this.endRide = view.findViewById(R.id.end_button)
         this.listRides = view.findViewById(R.id.list_button)
+        this.viewManager = LinearLayoutManager(activity)
+        this.viewAdapter = RideArrayAdapter(RideDb.getAll())
+        this.listView = view.findViewById<RecyclerView>(R.id.recycle_view_ride).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
     }
 
     private fun setButtonListeners() {
