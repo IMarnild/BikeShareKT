@@ -11,8 +11,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.arnild.android.bikesharekt.R
 import com.arnild.android.bikesharekt.activities.EndRideActivity
+import com.arnild.android.bikesharekt.activities.RideInfoActivity
 import com.arnild.android.bikesharekt.activities.StartRideActivity
 import com.arnild.android.bikesharekt.adapters.RideArrayAdapter
+import com.arnild.android.bikesharekt.data.Ride
 import com.arnild.android.bikesharekt.data.RideDb
 
 class BikeShareFragment : Fragment() {
@@ -43,6 +45,16 @@ class BikeShareFragment : Fragment() {
         this.listView.visibility =  if (isRideListVisible) View.VISIBLE else View.GONE
     }
 
+    override fun onStart() {
+        super.onStart()
+        // TODO: find out how to auto-update recyclerViewAdapter
+        if (this.isRideListVisible) {
+            //refresh list
+            this.toggleRideList()
+            this.toggleRideList()
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean(LIST_RIDE_VISIBILITY, this.isRideListVisible)
@@ -53,7 +65,7 @@ class BikeShareFragment : Fragment() {
         this.endRide = view.findViewById(R.id.end_button)
         this.listRides = view.findViewById(R.id.list_button)
         this.viewManager = LinearLayoutManager(activity)
-        this.viewAdapter = RideArrayAdapter(RideDb.getAll())
+        this.viewAdapter = RideArrayAdapter(RideDb.getAll()) { ride : Ride -> onListItemClicked(ride)}
         this.listView = view.findViewById<RecyclerView>(R.id.recycle_view_ride).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -70,10 +82,10 @@ class BikeShareFragment : Fragment() {
             val intent = Intent(activity, EndRideActivity::class.java)
             this.startActivity(intent) }
 
-        this.listRides.setOnClickListener { this.showRides() }
+        this.listRides.setOnClickListener { this.toggleRideList() }
     }
 
-    private fun showRides() {
+    private fun toggleRideList() {
         if (this.listView.visibility == View.GONE) {
             this.listView.visibility = View.VISIBLE
             this.isRideListVisible = true
@@ -82,6 +94,20 @@ class BikeShareFragment : Fragment() {
             this.listView.visibility = View.GONE
             this.isRideListVisible = false
         }
+    }
+
+    private fun onListItemClicked(rideItem: Ride) {
+        println("clicked" + rideItem.bikeName)
+
+        var intent = Intent(activity, RideInfoActivity::class.java)
+
+        intent.putExtra("Ride_NAME", rideItem.bikeName)
+        intent.putExtra("RIDE_START", rideItem.startRide)
+        intent.putExtra("RIDE_END", rideItem.endRide)
+        intent.putExtra("RIDE_START_TIME", rideItem.startRideTime)
+        intent.putExtra("RIDE_END_TIME", rideItem.endRideTime)
+
+        this.startActivity(intent)
     }
 
 }

@@ -3,6 +3,8 @@ package com.arnild.android.bikesharekt.data
 import android.app.Activity
 import android.widget.TextView
 import com.arnild.android.bikesharekt.R
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RideForm {
 
@@ -27,9 +29,9 @@ class RideForm {
     }
 
     fun submit(bike: String, start: String, end: String) {
-        if (confirmUserInput()) {
-            this.last = Ride(bike, start, end)
-            RideDb.add(bike,start,end)
+        if (this.confirmUserInput()) {
+            this.last = Ride(bike, start, end, this.getDate(), this.getDate())
+            RideDb.add(bike,start,end, this.getDate(), this.getDate())
             updateUI()
         }
     }
@@ -40,6 +42,12 @@ class RideForm {
 
     fun getWhere(): String {
         return this.newWhere.text.toString().trim()
+    }
+
+    private fun getDate(): String {
+        val date = Calendar.getInstance().time
+        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss", Locale.GERMAN)
+        return simpleDateFormat.format(date)
     }
 
     private fun confirmUserInput(): Boolean {
