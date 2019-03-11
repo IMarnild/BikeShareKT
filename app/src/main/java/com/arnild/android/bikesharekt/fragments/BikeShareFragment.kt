@@ -1,6 +1,8 @@
 package com.arnild.android.bikesharekt.fragments
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -19,14 +21,15 @@ import com.arnild.android.bikesharekt.data.RideDb
 
 class BikeShareFragment : Fragment() {
 
+    private val LIST_RIDE_VISIBILITY: String = "rideList"
+    private var isRideListVisible: Boolean = false
     private lateinit var listView: RecyclerView
     private lateinit var viewAdapter: RideArrayAdapter
     private lateinit var addRide: Button
     private lateinit var endRide: Button
     private lateinit var listRides: Button
-    private val LIST_RIDE_VISIBILITY: String = "rideList"
-    private var isRideListVisible: Boolean = false
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,7 +44,7 @@ class BikeShareFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        this.isRideListVisible = savedInstanceState?.getBoolean(LIST_RIDE_VISIBILITY, false) ?: false
+        this.loadPreferences()
         this.listView.visibility =  if (isRideListVisible) View.VISIBLE else View.GONE
     }
 
@@ -61,6 +64,7 @@ class BikeShareFragment : Fragment() {
     }
 
     private fun initVariables(view: View) {
+        this.preferences = activity!!.getPreferences(Context.MODE_PRIVATE)
         this.addRide = view.findViewById(R.id.add_button)
         this.endRide = view.findViewById(R.id.end_button)
         this.listRides = view.findViewById(R.id.list_button)
@@ -94,6 +98,7 @@ class BikeShareFragment : Fragment() {
             this.listView.visibility = View.GONE
             this.isRideListVisible = false
         }
+        this.savePreferences()
     }
 
     private fun onListItemClicked(rideItem: Ride) {
@@ -108,6 +113,16 @@ class BikeShareFragment : Fragment() {
         intent.putExtra("RIDE_END_TIME", rideItem.endRideTime)
 
         this.startActivity(intent)
+    }
+
+    private fun savePreferences() {
+        var editor = this.preferences.edit()
+        editor.putBoolean(LIST_RIDE_VISIBILITY, this.isRideListVisible)
+        editor.apply()
+    }
+
+    private fun loadPreferences() {
+        this.isRideListVisible = this.preferences.getBoolean(LIST_RIDE_VISIBILITY, false)
     }
 
 }
